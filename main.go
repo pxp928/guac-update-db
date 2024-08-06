@@ -14,6 +14,8 @@ func generateUUIDKey(data []byte) uuid.UUID {
 	return uuid.NewHash(sha256.New(), uuid.NameSpaceDNS, data, 5)
 }
 
+// Currently this is used to provide a proper migration for changes made in: https://github.com/guacsec/guac/pull/2060 and https://github.com/guacsec/guac/pull/2021.
+// This changes to GUAC are a breaking change to existing ENT databases. This will provide a proper migration path before atlas is run.
 func main() {
 	conn, err := pgx.Connect(context.Background(), "postgres://guac:guac@localhost:5432/guac?sslmode=disable")
 	if err != nil {
