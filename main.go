@@ -115,4 +115,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to add foreign key constraint: %v\n", err)
 	}
+	fmt.Print("Success!")
 }
