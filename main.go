@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
@@ -17,7 +18,14 @@ func generateUUIDKey(data []byte) uuid.UUID {
 // Currently this is used to provide a proper migration for changes made in: https://github.com/guacsec/guac/pull/2060 and https://github.com/guacsec/guac/pull/2021.
 // This changes to GUAC are a breaking change to existing ENT databases. This will provide a proper migration path before atlas is run.
 func main() {
-	conn, err := pgx.Connect(context.Background(), "postgres://guac:guac@localhost:5432/guac?sslmode=disable")
+
+	// get graphQL address from environment variable
+	gqlAddr := os.Getenv("GUAC_GQL_ADDR")
+	if gqlAddr == "" {
+		log.Fatalf("failed to get graphQL address from environment variable GUAC_GQL_ADDR")
+	}
+
+	conn, err := pgx.Connect(context.Background(), gqlAddr)
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
