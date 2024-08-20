@@ -6,4 +6,4 @@ Currently this is used to provide a proper migration for changes made in: https:
 
 This changes to GUAC are a breaking change to existing ENT databases. This will provide a proper migration path before atlas is run.
 
-Set the environment variable `GUAC_GQL_ADDR` to set the address of the GUAC ENT Database
+Set the postgres environment variable `PGDATABASE`, `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, and `PGPASSWORD` to set the address of the GUAC ENT Database
