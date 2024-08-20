@@ -19,13 +19,32 @@ func generateUUIDKey(data []byte) uuid.UUID {
 // This changes to GUAC are a breaking change to existing ENT databases. This will provide a proper migration path before atlas is run.
 func main() {
 
-	// get graphQL address from environment variable
-	gqlAddr := os.Getenv("GUAC_GQL_ADDR")
-	if gqlAddr == "" {
-		log.Fatalf("failed to get graphQL address from environment variable GUAC_GQL_ADDR")
+	// Fetch PostgreSQL environment variables
+	pgHost := os.Getenv("PGHOST")
+	if pgHost == "" {
+		log.Fatalf("failed to get postgres environment variable PGHOST")
+	}
+	pgPort := os.Getenv("PGPORT")
+	if pgPort == "" {
+		log.Fatalf("failed to get postgres environment variable PGPORT")
+	}
+	pgDatabase := os.Getenv("PGDATABASE")
+	if pgDatabase == "" {
+		log.Fatalf("failed to get postgres environment variable PGDATABASE")
+	}
+	pgUser := os.Getenv("PGUSER")
+	if pgUser == "" {
+		log.Fatalf("failed to get postgres environment variable PGUSER")
+	}
+	pgPassword := os.Getenv("PGPASSWORD")
+	if pgPassword == "" {
+		log.Fatalf("failed to get postgres environment variable PGPASSWORD")
 	}
 
-	conn, err := pgx.Connect(context.Background(), gqlAddr)
+	url := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		pgUser, pgPassword, pgHost, pgPort, pgDatabase)
+
+	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
